@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Linkers Test">
+  <meta name="author" content="Deeksha Bajaj">
+  <title>Linkers Test</title>
+  <!-- Bootstrap Core CSS -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+    crossorigin="anonymous">
+  <style>
+  body {
+    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    line-height: 1.1;
+    color: inherit;
+    margin-top: 50px;
+  }
+  .form-control:focus {
+    color: #3f3f3f;
+    border: 2px solid #3f3f3f;
+  }
+  .form-group {
+    margin-top: 20px !important;
+  }
+  #results {
+    margin: 10px auto;
+    border: 1px solid #3f3f3f;
+    padding: 15px;
+    width: 85%;
+    border-radius: 5px;
+    position: relative;
+  }
+  </style>
+<!-- font Awesome -->
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+<!-- Custom Fonts -->
+<link href="//fonts.googleapis.com/css?family=Open+Sans:300,600,700" rel="stylesheet" type="text/css" />
+</head>
+
+<body id="page-top" class="index">
+  <div class="container">
+    <h1> Welcome to Linkers Test </h1>
+    <h4> Enter the text to search </h4>
+    <input type="text" class="form-control" id="search" placeholder="Search your Content here" required="" data-validation-required-message="Please enter the content"
+      aria-invalid="false" onfocusout='onLeave()'>
+    <div class="error-message"></div>
+    <div style="margin-top: 30px;" class="form-group text-center">
+      <button id='sendButton' class="btn btn-success">Send</button>
+    </div>
+  </div>
+  <script>
+    const button = document.querySelector('#sendButton');
+    const inputField = document.querySelector('#search');
+    const errorDiv = document.querySelector('.error-message');
+
+    function addToDom(resultArr) {
+      function displayNoResults(){
+        const errorHeading = document.createElement('h4');
+        errorHeading.innerHTML = 'No Results Found! :(';
+        div.appendChild(errorHeading);
+      }
+      let div = document.querySelector('#results');
+      if (!div) {
+        div = document.createElement('div');
+        div.id = 'results';
+      } else {
+        div.innerHTML = '';
+      }
+      if (resultArr != null) {
+        if (resultArr.length > 0) {
+          resultArr.forEach((val, key) => {
+            const resultDiv = resultTemplate(val);
+            div.appendChild(resultDiv);
+          });
+        }else{
+          displayNoResults();
+        }
+      } else {
+        displayNoResults();
+      }
+      const docBody = document.body;
+      docBody.appendChild(div);
+    }
+
+    function resultTemplate(resArray) {
+      const div = document.createElement('div');
+      div.className = 'results';
+
+      const resultSpan = document.createElement('p');
+      resArray.forEach((val, key) => {
+        const span = document.createElement('span');
+        span.innerHTML = `&nbsp;&nbsp;${val}&nbsp;&nbsp;`
+        resultSpan.appendChild(span);
+      });
+      div.appendChild(resultSpan);
+      return div;
+    }
+
+    function onLeave() {
+      const inputValue = inputField.value;
+      var matches = inputValue.match(/\d+/g);
+      if (matches != null) {
+        errorDiv.innerHTML = 'Please do not enter numbers!';
+        button.classList.add('disabled');
+      } else {
+        errorDiv.innerHTML = '';
+        button.classList.remove('disabled');
+      }
+    };
+
+    button.onclick = () => {
+      if (button.className.split(" ").indexOf('disabled') == -1) {
+        const placeString = inputField.value;
+
+        //XHR Request
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            // Action to be performed when the document is read;
+            const resultArr = xhttp.response;
+            addToDom(resultArr);
+          }
+        };
+        xhttp.open("GET", `/search/${placeString}`, true);
+        xhttp.responseType = 'json';
+        xhttp.send();
+      }
+    }
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "linkers",
+  "version": "1.0.0",
+  "description": "Linkers Test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "csv"
+  ],
+  "author": "Deeksha Bajaj",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.1.4",
+    "csv-parser": "^1.11.0",
+    "express": "^4.14.1",
+    "iconv-lite": "^0.4.15",
+    "path": "^0.12.7"
+  }
+}
