@@ -1,10 +1,11 @@
+"use strict";
 var csv = require('csv-parser'); // ES5
 var path = require('path');
 var iconv = require('iconv-lite');
 var async = require('async');
 var fs = require('fs');
 
-CsvParser = {
+const CsvParser = {
 
   findString: function (string,res) {
     async.series([
